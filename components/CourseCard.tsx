@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image"
+import Image from "next/image";
 
 export type Course = {
   title: string;
@@ -16,9 +16,15 @@ type CourseCardProps = {
 
 export function CourseCard({ course }: CourseCardProps) {
   return (
-    <article className="group overflow-hidden rounded-xl border border-slate-200 bg-white transition duration-200 hover:-translate-y-0.5 hover:scale-[1.01] hover:shadow-lg">
+    <article className="group overflow-hidden rounded-2xl border border-slate-200 bg-white/95 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-xl">
       <div className="aspect-video w-full bg-slate-100">
-        <Image src={course.image} alt={course.imageAlt} width={400} height={300}/>
+        <Image
+          src={course.image}
+          alt={course.imageAlt}
+          width={400}
+          height={300}
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+        />
       </div>
 
       <div className="p-6">
@@ -28,7 +34,7 @@ export function CourseCard({ course }: CourseCardProps) {
 
         <Link
           href={`/courses/${course.slug}`}
-          className="mt-5 inline-flex rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          className="mt-5 inline-flex rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           View Course
         </Link>
