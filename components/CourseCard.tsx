@@ -1,14 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export type Course = {
-  title: string;
-  description: string;
-  price: string;
-  slug: string;
-  image: string;
-  imageAlt: string;
-};
+import type { Course } from "../lib/types/course";
 
 type CourseCardProps = {
   course: Course;
