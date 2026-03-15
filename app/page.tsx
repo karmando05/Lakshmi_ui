@@ -68,9 +68,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-<div className="bg-red-500 text-white text-4xl p-8">
-      Tailwind test
-    </div>
       <section aria-labelledby="testimonials" className="py-16 sm:py-20">
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
           <h2 id="testimonials" className="text-2xl font-semibold text-slate-900 sm:text-3xl">
