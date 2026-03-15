@@ -55,25 +55,31 @@ export default function HomePage() {
       <Hero />
       <Benefits />
 
-      <section aria-labelledby="featured-courses" className="bg-white py-16 sm:py-20">
+      <section aria-labelledby="featured-courses" className="py-16 sm:py-20">
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
           <h2 id="featured-courses" className="text-2xl font-semibold text-slate-900 sm:text-3xl">
             Featured Courses
           </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
+            Pick one course and start implementing today with easy, practical lessons.
+          </p>
           <div className="mt-8">
             <CourseGrid courses={featuredCourses} />
           </div>
         </div>
       </section>
 
-      <section aria-labelledby="testimonials" className="bg-slate-50 py-16 sm:py-20">
+      <section aria-labelledby="testimonials" className="py-16 sm:py-20">
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
           <h2 id="testimonials" className="text-2xl font-semibold text-slate-900 sm:text-3xl">
             Testimonials
           </h2>
           <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
             {testimonials.map((testimonial) => (
-              <article key={testimonial.name} className="rounded-xl border border-slate-200 bg-white p-6">
+              <article
+                key={testimonial.name}
+                className="rounded-2xl border border-slate-200/80 bg-white/90 p-6 shadow-sm ring-1 ring-indigo-100/50"
+              >
                 <div className="flex items-center gap-3">
                   <div
                     className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 text-sm font-semibold text-indigo-700"
