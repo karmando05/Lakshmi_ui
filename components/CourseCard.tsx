@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image"
 
 export type Course = {
   title: string;
@@ -17,7 +18,7 @@ export function CourseCard({ course }: CourseCardProps) {
   return (
     <article className="group overflow-hidden rounded-xl border border-slate-200 bg-white transition duration-200 hover:-translate-y-0.5 hover:scale-[1.01] hover:shadow-lg">
       <div className="aspect-video w-full bg-slate-100">
-        <img src={course.image} alt={course.imageAlt} className="h-full w-full object-cover" />
+        <Image src={course.image} alt={course.imageAlt} width={400} height={300}/>
       </div>
 
       <div className="p-6">
