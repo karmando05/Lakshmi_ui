@@ -1,4 +1,4 @@
-import { Course, CourseCard } from "@/components/CourseCard";
+import { Course, CourseCard } from "../components/CourseCard";
 
 type CourseGridProps = {
   courses: Course[];

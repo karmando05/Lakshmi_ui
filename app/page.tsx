@@ -1,7 +1,7 @@
-import { Benefits } from "@/components/Benefits";
-import { CourseGrid } from "@/components/CourseGrid";
-import { Hero } from "@/components/Hero";
-import type { Course } from "@/components/CourseCard";
+import { Benefits } from "../components/Benefits";
+import { CourseGrid } from "../components/CourseGrid";
+import { Hero } from "../components/Hero";
+import type { Course } from "../components/CourseCard";
 
 const featuredCourses: Course[] = [
   {

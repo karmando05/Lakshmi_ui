@@ -1,5 +1,5 @@
-import { CourseGrid } from "@/components/CourseGrid";
-import type { Course } from "@/components/CourseCard";
+import { CourseGrid } from "../../components/CourseGrid";
+import type { Course } from "../../components/CourseCard";
 
 const courses: Course[] = [
   {
