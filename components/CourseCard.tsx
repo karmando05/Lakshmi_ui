@@ -22,7 +22,7 @@ export function CourseCard({ course }: CourseCardProps) {
 
       <div className="p-6">
         <h3 className="text-lg font-semibold text-slate-900">{course.title}</h3>
-        <p className="mt-2 text-sm leading-6 text-slate-600">{course.description}</p>
+        <p className="mt-2 text-sm leading-6 text-slate-600">{course.shortDescription}</p>
         <div className="mt-5 flex items-center justify-between">
           <p className="text-lg font-semibold text-indigo-700">{course.price}</p>
           <Link
