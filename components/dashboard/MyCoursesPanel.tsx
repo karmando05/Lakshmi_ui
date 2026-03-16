@@ -48,7 +48,7 @@ export function MyCoursesPanel() {
               <p className="mt-1 text-xs text-slate-500">By {course.instructorName}</p>
               <p className="mt-2 text-sm text-slate-600">{course.shortDescription}</p>
               <Link
-                href={`/courses/${course.slug}`}
+                href={`/learn/${course.slug}`}
                 className="mt-4 inline-flex rounded-lg bg-indigo-600 px-3 py-2 text-xs font-semibold text-white hover:bg-indigo-500"
               >
                 Start learning
