@@ -1,4 +1,5 @@
 import { ProtectedRoute } from "../../components/auth/ProtectedRoute";
+import { MyCoursesPanel } from "../../components/dashboard/MyCoursesPanel";
 
 export default function DashboardPage() {
   return (
@@ -9,6 +10,7 @@ export default function DashboardPage() {
           <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
             Welcome back! Continue your courses and track your progress.
           </p>
+          <MyCoursesPanel />
         </div>
       </section>
     </ProtectedRoute>

@@ -1,12 +1,14 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { useAuth } from "../../components/providers/AuthProvider";
 import { getAllMockUsers } from "../../lib/users/mock-user-store";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const nextPath = searchParams.get("next");
   const { isAuthenticated, role, login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,8 +24,13 @@ export default function LoginPage() {
       return;
     }
 
+    if (nextPath) {
+      router.replace(nextPath);
+      return;
+    }
+
     router.replace("/dashboard");
-  }, [isAuthenticated, role, router]);
+  }, [isAuthenticated, nextPath, role, router]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -41,6 +48,11 @@ export default function LoginPage() {
 
     if (matchedUser?.role === "admin") {
       router.push("/admin");
+      return;
+    }
+
+    if (nextPath) {
+      router.push(nextPath);
       return;
     }
 

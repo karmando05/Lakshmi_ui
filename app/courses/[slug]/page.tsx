@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CourseCurriculum } from "../../../components/CourseCurriculum";
 import { getCourseDetailPageData } from "../../../lib/services/coursesService";
@@ -37,12 +38,12 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
           <p className="mt-4 text-sm leading-6 text-slate-600">{course.shortDescription}</p>
           <div className="mt-6 border-t border-slate-200 pt-6">
             <p className="text-3xl font-bold text-slate-900">{course.price}</p>
-            <button
-              type="button"
+            <Link
+              href={`/checkout/${course.slug}`}
               className="mt-5 inline-flex w-full items-center justify-center rounded-lg bg-indigo-600 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-indigo-500"
             >
               Buy Course
-            </button>
+            </Link>
           </div>
         </aside>
       </section>
