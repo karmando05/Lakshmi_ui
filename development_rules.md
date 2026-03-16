@@ -376,3 +376,13 @@ Code should be written for **future developers**, not only the current
 one.
 
 The next developer maintaining your code might be you.
+
+------------------------------------------------------------------------
+
+# 21. Mock Data Location
+
+All frontend mock information used for local-only development must be stored under:
+
+    /lib/data/mock
+
+Do not place mock users, sessions, or auth fixtures outside this folder.
