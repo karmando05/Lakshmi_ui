@@ -3,13 +3,13 @@ import { CourseCurriculum } from "../../../components/CourseCurriculum";
 import { getCourseDetailPageData } from "../../../lib/services/coursesService";
 
 type CourseDetailPageProps = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
 export default async function CourseDetailPage({ params }: CourseDetailPageProps) {
-  const { slug } = params;
+  const { slug } = await params;
   const { course } = await getCourseDetailPageData(slug);
 
   if (!course) {
