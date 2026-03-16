@@ -37,7 +37,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
 
   function handleLogout() {
     logout();
-    router.push("/login");
+    router.push("/sign-in");
   }
 
   return (
@@ -105,7 +105,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
                   className="rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
                   onClick={handleLogout}
                 >
-                  Logout
+                  Sign out
                 </button>
               </div>
             </header>

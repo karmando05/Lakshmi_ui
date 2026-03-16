@@ -16,7 +16,7 @@ export function Header() {
 
   function handleLogout() {
     logout();
-    router.push("/login");
+    router.push("/sign-in");
   }
 
   return (
@@ -41,10 +41,10 @@ export function Header() {
         <div className="flex items-center gap-3">
           {!isAuthenticated && (
             <Link
-              href="/login"
+              href="/sign-in"
               className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:border-indigo-300 hover:text-indigo-600"
             >
-              Login
+              Sign in
             </Link>
           )}
 
@@ -64,7 +64,7 @@ export function Header() {
                 onClick={handleLogout}
                 className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition-colors hover:border-indigo-300 hover:text-indigo-600"
               >
-                Logout
+                Sign out
               </button>
             </>
           )}
@@ -85,7 +85,7 @@ export function Header() {
                 onClick={handleLogout}
                 className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition-colors hover:border-indigo-300 hover:text-indigo-600"
               >
-                Logout
+                Sign out
               </button>
             </>
           )}

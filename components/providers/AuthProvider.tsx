@@ -15,7 +15,7 @@ type AuthContextValue = {
   isAuthenticated: boolean;
   role: MockUserRole | null;
   isReady: boolean;
-  login: (email: string, password: string) => boolean;
+  login: (email: string, password: string) => AuthenticatedUser | null;
   logout: () => void;
 };
 
@@ -31,16 +31,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsReady(true);
   }, []);
 
-  function login(email: string, password: string): boolean {
+  function login(email: string, password: string): AuthenticatedUser | null {
     const matchedUser = validateMockCredentials(email, password);
 
     if (!matchedUser) {
-      return false;
+      return null;
     }
 
     saveMockSession(matchedUser);
     setCurrentUser(matchedUser);
-    return true;
+    return matchedUser;
   }
 
   function logout(): void {

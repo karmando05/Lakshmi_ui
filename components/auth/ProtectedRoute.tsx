@@ -19,7 +19,7 @@ export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) 
     }
 
     if (!isAuthenticated) {
-      router.replace("/login");
+      router.replace("/sign-in");
       return;
     }
 
