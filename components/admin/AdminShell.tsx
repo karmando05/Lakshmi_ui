@@ -19,6 +19,7 @@ const pageTitleMap: Record<string, string> = {
   "/admin/courses/new": "Create Course",
   "/admin/sales": "Sales",
   "/admin/users": "Users",
+  "/admin/users/new": "Create User",
 };
 
 function getPageTitle(pathname: string): string {
