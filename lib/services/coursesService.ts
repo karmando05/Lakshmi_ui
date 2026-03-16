@@ -10,3 +10,14 @@ export async function getCoursesPageData(
     courses,
   };
 }
+
+export async function getCourseDetailPageData(
+  slug: string,
+  repository: CoursesRepository = mockCoursesRepository,
+) {
+  const course = await repository.getCourseBySlug(slug);
+
+  return {
+    course,
+  };
+}
