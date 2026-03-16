@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { Footer } from "../components/Footer";
-import { Header } from "../components/Header";
+import { SiteChrome } from "../components/layout/SiteChrome";
 import { AuthProvider } from "../components/providers/AuthProvider";
 
 import "./globals.css";
@@ -20,9 +19,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-white text-slate-900 antialiased">
         <AuthProvider>
           <div className="flex min-h-screen flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
+            <SiteChrome>{children}</SiteChrome>
           </div>
         </AuthProvider>
       </body>

@@ -1,0 +1,122 @@
+import type { AdminCourse } from "../../types/admin";
+
+export const mockAdminCourses: AdminCourse[] = [
+  {
+    id: "course-1",
+    title: "Marketing for Entrepreneurs",
+    slug: "marketing-for-entrepreneurs",
+    shortDescription: "Build a repeatable funnel using social channels.",
+    description:
+      "A practical marketing system for founders who need consistent sales without a large team.",
+    instructor: "Alison Meneses",
+    price: 499,
+    thumbnail:
+      "https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1200&q=80",
+    status: "published",
+    category: "Marketing",
+    estimatedDuration: "6 weeks",
+    featured: true,
+    previewVideoUrl: "https://example.com/videos/marketing-preview",
+    updatedAt: "2026-02-15T10:30:00.000Z",
+    modules: [
+      {
+        id: "module-1",
+        title: "Foundations",
+        order: 1,
+        lessons: [
+          {
+            id: "lesson-1",
+            title: "Customer personas",
+            type: "text",
+            videoUrl: "",
+            resourceUrl: "https://example.com/persona-template.pdf",
+            description: "Define your ideal customer profile.",
+            order: 1,
+            isPreview: true,
+          },
+          {
+            id: "lesson-2",
+            title: "Offer positioning",
+            type: "video",
+            videoUrl: "https://example.com/video/offer-positioning",
+            resourceUrl: "",
+            description: "Position your offer against competitors.",
+            order: 2,
+            isPreview: false,
+          },
+        ],
+      },
+      {
+        id: "module-2",
+        title: "Acquisition channels",
+        order: 2,
+        lessons: [
+          {
+            id: "lesson-3",
+            title: "Instagram growth plan",
+            type: "video",
+            videoUrl: "https://example.com/video/ig-growth",
+            resourceUrl: "",
+            description: "Content frameworks that attract qualified leads.",
+            order: 1,
+            isPreview: false,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "course-2",
+    title: "WhatsApp Sales Blueprint",
+    slug: "whatsapp-sales-blueprint",
+    shortDescription: "Convert conversations into paying customers.",
+    description: "Scripts and workflows for high-converting WhatsApp sales conversations.",
+    instructor: "Marina Oliveira",
+    price: 299,
+    thumbnail:
+      "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80",
+    status: "draft",
+    category: "Sales",
+    estimatedDuration: "4 weeks",
+    featured: false,
+    previewVideoUrl: "",
+    updatedAt: "2026-01-20T17:45:00.000Z",
+    modules: [
+      {
+        id: "module-3",
+        title: "Sales psychology",
+        order: 1,
+        lessons: [
+          {
+            id: "lesson-4",
+            title: "Objection handling",
+            type: "resource",
+            videoUrl: "",
+            resourceUrl: "https://example.com/objections-playbook.pdf",
+            description: "Templates for common objections and rebuttals.",
+            order: 1,
+            isPreview: false,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "course-3",
+    title: "Content Systems for Busy Founders",
+    slug: "content-systems-for-busy-founders",
+    shortDescription: "Create one month of content in one day.",
+    description: "A lean content production workflow for solo founders and tiny teams.",
+    instructor: "Daniela Costa",
+    price: 399,
+    thumbnail:
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+    status: "archived",
+    category: "Content",
+    estimatedDuration: "5 weeks",
+    featured: false,
+    previewVideoUrl: "https://example.com/videos/content-systems",
+    updatedAt: "2025-12-02T09:00:00.000Z",
+    modules: [],
+  },
+];
