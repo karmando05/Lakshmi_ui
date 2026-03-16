@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { useAuth } from "../../components/providers/AuthProvider";
-import { MOCK_USERS } from "../../lib/data/mock/users";
+import { getAllMockUsers } from "../../lib/users/mock-user-store";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -37,7 +37,7 @@ export default function LoginPage() {
 
     setErrorMessage("");
 
-    const matchedUser = MOCK_USERS.find((user) => user.email === email.trim().toLowerCase());
+    const matchedUser = getAllMockUsers().find((user) => user.email === email.trim().toLowerCase());
 
     if (matchedUser?.role === "admin") {
       router.push("/admin");

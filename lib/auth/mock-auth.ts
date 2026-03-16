@@ -1,5 +1,6 @@
 import { MOCK_AUTH_STORAGE_KEY } from "../data/mock/session";
-import { MOCK_USERS, type MockUser } from "../data/mock/users";
+import { type MockUser } from "../data/mock/users";
+import { getAllMockUsers } from "../users/mock-user-store";
 
 export type AuthenticatedUser = Omit<MockUser, "password">;
 
@@ -14,7 +15,7 @@ export function validateMockCredentials(
 ): AuthenticatedUser | null {
   const normalizedEmail = email.trim().toLowerCase();
 
-  const matchedUser = MOCK_USERS.find(
+  const matchedUser = getAllMockUsers().find(
     (user) => user.email.toLowerCase() === normalizedEmail && user.password === password,
   );
 
