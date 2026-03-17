@@ -1,5 +1,29 @@
-import type { Course } from "../../types/course";
+import type { Course, CourseLearningModule } from "../../types/course";
 
+function buildLearningModules(courseSlug: string, modules: Course["curriculum"]): CourseLearningModule[] {
+  return modules.map((module, moduleIndex) => ({
+    title: module.title,
+    lessons: module.lessons.map((lessonTitle, lessonIndex) => {
+      const lessonId = `${moduleIndex + 1}-${lessonIndex + 1}`;
+      const hasResource = lessonIndex % 2 === 0;
+
+      return {
+        id: lessonId,
+        title: lessonTitle,
+        description:
+          "In this lesson, you will learn practical and actionable steps to apply immediately in your business. Complete the checklist before moving to the next class.",
+        videoUrl: `https://www.youtube.com/embed/dQw4w9WgXcQ?start=${(moduleIndex + lessonIndex) * 12}`,
+        resource: hasResource
+          ? {
+              type: "pdf",
+              label: `${lessonTitle} worksheet`,
+              url: `https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf?course=${courseSlug}&lesson=${lessonId}`,
+            }
+          : undefined,
+      };
+    }),
+  }));
+}
 export const mockCourses: Course[] = [
   {
     title: "Marketing for Entrepreneurs",
@@ -28,6 +52,20 @@ export const mockCourses: Course[] = [
         lessons: ["Conversations that convert", "Closing the sale"],
       },
     ],
+    learningModules: buildLearningModules("marketing-for-entrepreneurs", [
+      {
+        title: "Module 1 – Fundamentals",
+        lessons: ["What is marketing", "Finding your ideal customer"],
+      },
+      {
+        title: "Module 2 – Instagram",
+        lessons: ["Optimizing your profile", "Content that attracts customers"],
+      },
+      {
+        title: "Module 3 – WhatsApp Sales",
+        lessons: ["Conversations that convert", "Closing the sale"],
+      },
+    ]),
   },
   {
     title: "Instagram Content That Sells",
@@ -55,6 +93,20 @@ export const mockCourses: Course[] = [
         lessons: ["Turning DMs into leads", "Content audit checklist"],
       },
     ],
+    learningModules: buildLearningModules("instagram-content-that-sells", [
+      {
+        title: "Module 1 – Content Strategy",
+        lessons: ["Choosing your content pillars", "Planning one month in one hour"],
+      },
+      {
+        title: "Module 2 – Reels and Posts",
+        lessons: ["Hooks that stop the scroll", "Call-to-actions that invite action"],
+      },
+      {
+        title: "Module 3 – Conversion",
+        lessons: ["Turning DMs into leads", "Content audit checklist"],
+      },
+    ]),
   },
   {
     title: "WhatsApp Sales for Small Businesses",
@@ -82,5 +134,19 @@ export const mockCourses: Course[] = [
         lessons: ["How to ask for the sale", "Follow-up without sounding pushy"],
       },
     ],
+    learningModules: buildLearningModules("whatsapp-sales-for-small-businesses", [
+      {
+        title: "Module 1 – Sales Foundations",
+        lessons: ["The sales conversation structure", "Qualifying leads quickly"],
+      },
+      {
+        title: "Module 2 – Message Templates",
+        lessons: ["Opening messages that feel natural", "Handling common objections"],
+      },
+      {
+        title: "Module 3 – Closing and Follow-up",
+        lessons: ["How to ask for the sale", "Follow-up without sounding pushy"],
+      },
+    ]),
   },
 ];

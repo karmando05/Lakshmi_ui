@@ -6,8 +6,8 @@ import { useAuth } from "./providers/AuthProvider";
 
 const navigationItems = [
   { href: "/courses", label: "Courses" },
-  { href: "#benefits-heading", label: "Benefits" },
-  { href: "#testimonials", label: "Stories" },
+  { href: "/#benefits-heading", label: "Benefits" },
+  { href: "/#testimonials", label: "Stories" },
 ];
 
 export function Header() {

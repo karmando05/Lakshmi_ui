@@ -3,6 +3,25 @@ export type CourseModule = {
   lessons: string[];
 };
 
+export type CourseLessonResource = {
+  label: string;
+  url: string;
+  type: "pdf";
+};
+
+export type CourseLessonContent = {
+  id: string;
+  title: string;
+  description: string;
+  videoUrl: string;
+  resource?: CourseLessonResource;
+};
+
+export type CourseLearningModule = {
+  title: string;
+  lessons: CourseLessonContent[];
+};
+
 export type Course = {
   title: string;
   shortDescription: string;
@@ -14,4 +33,5 @@ export type Course = {
   imageAlt: string;
   previewVideoTitle: string;
   curriculum: CourseModule[];
+  learningModules?: CourseLearningModule[];
 };

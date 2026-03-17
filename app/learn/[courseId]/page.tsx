@@ -1,29 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { ProtectedRoute } from "../../../components/auth/ProtectedRoute";
 import { useAuth } from "../../../components/providers/AuthProvider";
 import { getUserEnrollments } from "../../../lib/commerce/mock-purchase-store";
 import { mockCourses } from "../../../lib/data/mock/courses";
-
-type LearnCoursePageProps = {
-  params: {
-    courseId: string;
-  };
-};
-
-type LessonItem = {
-  id: string;
-  moduleTitle: string;
-  moduleIndex: number;
-  lessonIndex: number;
-  title: string;
-  description: string;
-  videoUrl: string;
-  resourceUrl: string | null;
-};
 
 type PersistedProgress = {
   completedLessonIds: string[];
@@ -34,39 +17,33 @@ function progressStorageKey(userId: string, courseId: string): string {
   return `courselab_learning_progress_${userId}_${courseId}`;
 }
 
-function buildLessonData(courseId: string, curriculum: (typeof mockCourses)[number]["curriculum"]): LessonItem[] {
-  return curriculum.flatMap((module, moduleIndex) =>
-    module.lessons.map((lessonTitle, lessonIndex) => {
-      const lessonId = `${moduleIndex + 1}-${lessonIndex + 1}`;
-      const hasDownload = lessonIndex % 2 === 0;
-
-      return {
-        id: lessonId,
-        moduleTitle: module.title,
-        moduleIndex,
-        lessonIndex,
-        title: lessonTitle,
-        description:
-          "In this lesson, you will learn practical steps you can apply immediately to improve your results. Watch the full class and complete the action checklist before moving on.",
-        videoUrl: `https://www.youtube.com/embed/dQw4w9WgXcQ?start=${(moduleIndex + lessonIndex) * 12}`,
-        resourceUrl: hasDownload
-          ? `https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf?course=${courseId}&lesson=${lessonId}`
-          : null,
-      };
-    }),
-  );
-}
-
-export default function LearnCoursePage({ params }: LearnCoursePageProps) {
-  const { courseId } = params;
+export default function LearnCoursePage() {
+  const params = useParams<{ courseId: string }>();
+  const courseId = typeof params?.courseId === "string" ? params.courseId : "";
   const router = useRouter();
   const { currentUser, isReady } = useAuth();
 
   const course = useMemo(() => mockCourses.find((candidate) => candidate.slug === courseId) ?? null, [courseId]);
-  const lessonItems = useMemo(() => (course ? buildLessonData(course.slug, course.curriculum) : []), [course]);
+  const modules = course?.learningModules ?? [];
+  const lessonItems = useMemo(() => modules.flatMap((module) => module.lessons), [modules]);
 
-  const [currentLessonId, setCurrentLessonId] = useState<string>(lessonItems[0]?.id ?? "");
+  const [currentLessonId, setCurrentLessonId] = useState<string>("");
   const [completedLessonIds, setCompletedLessonIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (!lessonItems.length) {
+      setCurrentLessonId("");
+      return;
+    }
+
+    setCurrentLessonId((existing) => {
+      if (existing && lessonItems.some((lesson) => lesson.id === existing)) {
+        return existing;
+      }
+
+      return lessonItems[0].id;
+ });
+  }, [lessonItems]);
 
   useEffect(() => {
     if (!isReady || !currentUser || !course) {
@@ -85,8 +62,10 @@ export default function LearnCoursePage({ params }: LearnCoursePageProps) {
     const rawProgress = localStorage.getItem(key);
 
     if (!rawProgress) {
-      setCurrentLessonId(lessonItems[0]?.id ?? "");
       setCompletedLessonIds([]);
+      if (lessonItems[0]) {
+        setCurrentLessonId(lessonItems[0].id);
+      }
       return;
     }
 
@@ -101,8 +80,10 @@ export default function LearnCoursePage({ params }: LearnCoursePageProps) {
       setCurrentLessonId(nextCurrentLessonId);
       setCompletedLessonIds(nextCompleted);
     } catch {
-      setCurrentLessonId(lessonItems[0]?.id ?? "");
       setCompletedLessonIds([]);
+      if (lessonItems[0]) {
+        setCurrentLessonId(lessonItems[0].id);
+      }
       localStorage.removeItem(key);
     }
   }, [course, currentUser, isReady, lessonItems, router]);
@@ -113,12 +94,13 @@ export default function LearnCoursePage({ params }: LearnCoursePageProps) {
     }
 
     const key = progressStorageKey(currentUser.id, course.slug);
-    const payload: PersistedProgress = {
-      completedLessonIds,
-      currentLessonId,
-    };
-
-    localStorage.setItem(key, JSON.stringify(payload));
+    localStorage.setItem(
+      key,
+      JSON.stringify({
+        completedLessonIds,
+        currentLessonId,
+      } satisfies PersistedProgress),
+    );
   }, [completedLessonIds, course, currentLessonId, currentUser, isReady]);
 
   if (!course) {
@@ -126,7 +108,7 @@ export default function LearnCoursePage({ params }: LearnCoursePageProps) {
       <ProtectedRoute>
         <div className="mx-auto max-w-4xl px-6 py-16">
           <h1 className="text-2xl font-semibold text-slate-900">Course not found</h1>
-          <p className="mt-2 text-sm text-slate-600">The course you are trying to open does not exist.</p>
+          <p className="mt-2 text-sm text-slate-600">We could not find this course in mock data.</p>
           <Link
             href="/courses"
             className="mt-6 inline-flex rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
@@ -138,25 +120,30 @@ export default function LearnCoursePage({ params }: LearnCoursePageProps) {
     );
   }
 
+  if (!lessonItems.length) {
+    return (
+      <ProtectedRoute>
+        <div className="mx-auto max-w-4xl px-6 py-16">
+          <h1 className="text-2xl font-semibold text-slate-900">No lessons available yet</h1>
+          <p className="mt-2 text-sm text-slate-600">This course does not have learning lessons configured.</p>
+        </div>
+      </ProtectedRoute>
+    );
+  }
+
   const currentIndex = lessonItems.findIndex((lesson) => lesson.id === currentLessonId);
   const activeLesson = lessonItems[currentIndex] ?? lessonItems[0];
   const previousLesson = currentIndex > 0 ? lessonItems[currentIndex - 1] : null;
   const nextLesson = currentIndex >= 0 && currentIndex < lessonItems.length - 1 ? lessonItems[currentIndex + 1] : null;
-  const totalLessons = lessonItems.length;
   const completedCount = completedLessonIds.length;
-  const progressPercent = totalLessons === 0 ? 0 : Math.round((completedCount / totalLessons) * 100);
-  const isCurrentCompleted = completedLessonIds.includes(activeLesson.id);
-
-  function jumpToLesson(nextLessonId: string): void {
-    setCurrentLessonId(nextLessonId);
-  }
+  const progressPercent = Math.round((completedCount / lessonItems.length) * 100);
 
   function markCurrentAsCompleted(): void {
     if (completedLessonIds.includes(activeLesson.id)) {
       return;
     }
 
-    setCompletedLessonIds((existing) => [...existing, activeLesson.id]);
+    setCompletedLessonIds((previous) => [...previous, activeLesson.id]);
   }
 
   return (
@@ -171,11 +158,8 @@ export default function LearnCoursePage({ params }: LearnCoursePageProps) {
             <p className="text-sm font-semibold text-slate-600">{progressPercent}% complete</p>
           </div>
           <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-100">
-            <div className="h-full rounded-full bg-indigo-600 transition-all" style={{ width: `${progressPercent}%` }} />
+            <div className="h-full rounded-full bg-indigo-600" style={{ width: `${progressPercent}%` }} />
           </div>
-          <p className="mt-2 text-xs text-slate-500">
-            {completedCount} of {totalLessons} lessons completed
-          </p>
         </div>
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[320px,1fr] lg:items-start">
@@ -190,46 +174,38 @@ export default function LearnCoursePage({ params }: LearnCoursePageProps) {
                 id="lesson-picker"
                 className="mt-2 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-700"
                 value={activeLesson.id}
-                onChange={(event) => jumpToLesson(event.target.value)}
+                onChange={(event) => setCurrentLessonId(event.target.value)}
               >
                 {lessonItems.map((lesson) => (
                   <option key={lesson.id} value={lesson.id}>
-                    {lesson.moduleTitle} — {lesson.title}
+                    {lesson.title}
                   </option>
                 ))}
               </select>
             </div>
 
             <div className="mt-4 hidden max-h-[70vh] space-y-5 overflow-y-auto pr-1 lg:block">
-              {course.curriculum.map((module, moduleIndex) => (
+              {modules.map((module) => (
                 <section key={module.title}>
                   <h3 className="text-sm font-semibold text-slate-900">{module.title}</h3>
                   <ul className="mt-2 space-y-1.5">
-                    {module.lessons.map((lessonTitle, lessonIndex) => {
-                      const lesson = lessonItems.find(
-                        (candidate) => candidate.moduleIndex === moduleIndex && candidate.lessonIndex === lessonIndex,
-                      );
-
-                      if (!lesson) {
-                        return null;
-                      }
-
+                    {module.lessons.map((lesson, lessonIndex) => {
                       const isCurrent = lesson.id === activeLesson.id;
                       const isCompleted = completedLessonIds.includes(lesson.id);
 
                       return (
-                        <li key={`${module.title}-${lessonTitle}`}>
+                        <li key={`${module.title}-${lesson.id}`}>
                           <button
                             type="button"
-                            className={`w-full rounded-lg border px-3 py-2 text-left text-sm transition-colors ${
+                            className={`w-full rounded-lg border px-3 py-2 text-left text-sm ${
                               isCurrent
                                 ? "border-indigo-200 bg-indigo-50 text-indigo-700"
                                 : "border-transparent text-slate-700 hover:border-slate-200 hover:bg-slate-50"
                             }`}
-                            onClick={() => jumpToLesson(lesson.id)}
+                            onClick={() => setCurrentLessonId(lesson.id)}
                           >
                             <span className="mr-2 inline-flex h-5 w-5 items-center justify-center rounded-full border border-current text-[11px]">
-                              {isCompleted ? "✓" : lesson.lessonIndex + 1}
+                              {isCompleted ? "✓" : lessonIndex + 1}
                             </span>
                             {lesson.title}
                           </button>
@@ -243,8 +219,7 @@ export default function LearnCoursePage({ params }: LearnCoursePageProps) {
           </aside>
 
           <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
-            <p className="text-sm font-semibold text-indigo-600">{activeLesson.moduleTitle}</p>
-            <h2 className="mt-1 text-2xl font-bold text-slate-900">{activeLesson.title}</h2>
+            <h2 className="text-2xl font-bold text-slate-900">{activeLesson.title}</h2>
             <div className="relative mt-4 aspect-video overflow-hidden rounded-xl bg-slate-900">
               <iframe
                 className="h-full w-full"
@@ -256,9 +231,9 @@ export default function LearnCoursePage({ params }: LearnCoursePageProps) {
             </div>
             <p className="mt-4 text-sm leading-6 text-slate-600">{activeLesson.description}</p>
 
-            {activeLesson.resourceUrl ? (
+            {activeLesson.resource ? (
               <a
-                href={activeLesson.resourceUrl}
+                href={activeLesson.resource.url}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-4 inline-flex rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
@@ -273,7 +248,7 @@ export default function LearnCoursePage({ params }: LearnCoursePageProps) {
               <button
                 type="button"
                 disabled={!previousLesson}
-                onClick={() => previousLesson && jumpToLesson(previousLesson.id)}
+                onClick={() => previousLesson && setCurrentLessonId(previousLesson.id)}
                 className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Previous Lesson
@@ -281,7 +256,7 @@ export default function LearnCoursePage({ params }: LearnCoursePageProps) {
               <button
                 type="button"
                 disabled={!nextLesson}
-                onClick={() => nextLesson && jumpToLesson(nextLesson.id)}
+                onClick={() => nextLesson && setCurrentLessonId(nextLesson.id)}
                 className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Next Lesson
@@ -289,10 +264,10 @@ export default function LearnCoursePage({ params }: LearnCoursePageProps) {
               <button
                 type="button"
                 onClick={markCurrentAsCompleted}
-                disabled={isCurrentCompleted}
+                disabled={completedLessonIds.includes(activeLesson.id)}
                 className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:cursor-not-allowed disabled:bg-indigo-300"
               >
-                {isCurrentCompleted ? "Completed" : "Mark as Completed"}
+                {completedLessonIds.includes(activeLesson.id) ? "Completed" : "Mark as Completed"}
               </button>
             </div>
           </section>
