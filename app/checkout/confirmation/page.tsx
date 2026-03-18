@@ -2,12 +2,20 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useMemo } from "react";
+import { Suspense, useMemo } from "react";
 import { getMostRecentOrderForUser, getOrderById } from "../../../lib/commerce/mock-purchase-store";
 import { mockCourses } from "../../../lib/data/mock/courses";
 import { useAuth } from "../../../components/providers/AuthProvider";
 
 export default function CheckoutConfirmationPage() {
+  return (
+    <Suspense fallback={null}>
+      <CheckoutConfirmationContent />
+    </Suspense>
+  );
+}
+
+function CheckoutConfirmationContent() {
   const params = useSearchParams();
   const { currentUser, isAuthenticated, isReady } = useAuth();
   const orderId = params.get("orderId");
