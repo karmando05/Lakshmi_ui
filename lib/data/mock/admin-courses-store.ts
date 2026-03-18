@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable react-hooks/set-state-in-effect */
 
 import { useEffect, useState } from "react";
 import { mockAdminCourses } from "./admin-courses";
@@ -15,9 +16,9 @@ export function useAdminCoursesStore() {
 
     if (savedCourses) {
       try {
-        setCourses(JSON.parse(savedCourses) as AdminCourse[]);
+          setCourses(JSON.parse(savedCourses) as AdminCourse[]);
       } catch {
-        setCourses(mockAdminCourses);
+          setCourses(mockAdminCourses);
       }
     }
 

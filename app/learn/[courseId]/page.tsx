@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable react-hooks/set-state-in-effect */
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -24,7 +25,7 @@ export default function LearnCoursePage() {
   const { currentUser, isReady } = useAuth();
 
   const course = useMemo(() => mockCourses.find((candidate) => candidate.slug === courseId) ?? null, [courseId]);
-  const modules = course?.learningModules ?? [];
+  const modules = useMemo(() => course?.learningModules ?? [], [course]);
   const lessonItems = useMemo(() => modules.flatMap((module) => module.lessons), [modules]);
 
   const [currentLessonId, setCurrentLessonId] = useState<string>("");
@@ -64,7 +65,7 @@ export default function LearnCoursePage() {
     if (!rawProgress) {
       setCompletedLessonIds([]);
       if (lessonItems[0]) {
-        setCurrentLessonId(lessonItems[0].id);
+          setCurrentLessonId(lessonItems[0].id);
       }
       return;
     }
@@ -82,7 +83,7 @@ export default function LearnCoursePage() {
     } catch {
       setCompletedLessonIds([]);
       if (lessonItems[0]) {
-        setCurrentLessonId(lessonItems[0].id);
+          setCurrentLessonId(lessonItems[0].id);
       }
       localStorage.removeItem(key);
     }

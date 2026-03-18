@@ -1,7 +1,7 @@
 "use client";
 
+import { useId, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
 import { type AdminCourse, type CourseModule, type CourseStatus, type Lesson, type LessonType } from "../../lib/types/admin";
 import { useAdminCoursesStore } from "../../lib/data/mock/admin-courses-store";
 import { CourseStatusBadge } from "./admin-ui";
@@ -39,12 +39,13 @@ function createNewModule(order: number): CourseModule {
 
 export function CourseEditor({ course }: CourseEditorProps) {
   const router = useRouter();
+  const generatedCourseId = useId().replace(/:/g, "");
   const { saveCourse } = useAdminCoursesStore();
   const isEditing = Boolean(course);
 
   const [formData, setFormData] = useState<AdminCourse>(
     course ?? {
-      id: `course-${Date.now()}`,
+      id: `course-${generatedCourseId}`,
       title: "",
       slug: "",
       shortDescription: "",
