@@ -5,7 +5,8 @@ import { getAllMockUsers } from "../users/mock-user-store";
 export type AuthenticatedUser = Omit<MockUser, "password">;
 
 function toAuthenticatedUser(user: MockUser): AuthenticatedUser {
-  const { password, ...safeUser } = user;
+  const safeUser = { ...user };
+  delete safeUser.password;
   return safeUser;
 }
 
